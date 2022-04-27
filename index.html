@@ -35,16 +35,15 @@
         }
 
         function game(rounds) {
-            let score = 0;
+            let playerScore = 0;
+            let compScore = 0;
             for(let i = 0; i < rounds; i++){
                 let playerSelection = prompt("Rock, paper, scissors, shoot!");
                 let winner = playRound(playerSelection, computerPlay())
                 console.log(winner)
-                if(winner.substring(0,8) == "You win!"){
-                    score++;
-                }
+                winner.substring(0,8) == "You win!" ? playerScore++ : winner.substring(0,9) == "You lose!" ? compScore++: compScore;
             }
-            return score > rounds/2 ? "You win!": "You lose!";
+            return playerScore > compScore ? `You win! ${playerScore} : ${compScore}` : playerScore < compScore ? `You lose! ${playerScore} : ${compScore}` : `You tie! ${playerScore} : ${compScore}`;
         }
 
         console.log(game(5))
