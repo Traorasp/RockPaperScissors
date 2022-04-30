@@ -1,37 +1,55 @@
 const buttons = Array.from(document.querySelectorAll('#buttonContainer'));
 buttons.forEach(button => button.addEventListener('click', playRound))
 
+const displayWinner = document.querySelector('#winner');
+const playerScoreDisplay = document.querySelector('.playerScore');
+const computerScoreDisplay = document.querySelector('.compScore');
+
 function computerPlay(){
     const playNum = Math.floor(Math.random()*3)+1;
-    if(playNum === 1) {
-        return "Rock";
-    }else if(playNum === 2) {
-        return "Paper";
-    }else {
-        return "Scissors";
+    switch (playNum) {
+        case 1:
+            return 'rock';
+        case 2:
+            return 'paper';
+        case 3:
+            return 'scissors'
     }
 }
 
 function playRound(playerSelection){
-    let selection = playerSelection.target.getAttribute('class');
-    let computerSelection = computerPlay();
-    if(selection == computerSelection){ console.log("It's a tie!");}
-    else if(selection == "rock" && computerSelection =="Scissors"){console.log("You win! Rock beats scissors");}
-    else if(selection == "paper" && computerSelection == "Rock"){console.log("You win! Paper beats rock");}
-    else if(selection == "scissors" && computerSelection == "Paper"){console.log("You win! Scissors beats paper}");}
-    else {console.log(`You lose! ${computerSelection} beats ${selection}`);}
+    updateScore(game(playerSelection));
 }
 
-function game(rounds) {
-    let playerScore = 0;
-    let compScore = 0;
-    for(let i = 0; i < rounds; i++){
-        let playerSelection = prompt("Rock, paper, scissors, shoot!");
-        let winner = playRound(playerSelection, computerPlay())
-        console.log(winner)
-        winner.substring(0,8) == "You win!" ? playerScore++ : winner.substring(0,9) == "You lose!" ? compScore++: compScore;
+function updateScore(scoreChange){
+    let playerScore = +playerScoreDisplay.textContent;
+    let compScore = +computerScoreDisplay.textContent;
+
+    switch (scoreChange) {
+        case -1: 
+            computerScoreDisplay.textContent = compScore + 1;
+            break; 
+        case 0:
+            break;
+        case 1:
+            playerScoreDisplay.textContent = playerScore + 1;
+            break;
     }
-    return playerScore > compScore ? `You win! ${playerScore} : ${compScore}` : playerScore < compScore ? `You lose! ${playerScore} : ${compScore}` : `You tie! ${playerScore} : ${compScore}`;
+    if(playerScoreDisplay.textContent >= 5 ){displayWinner.textContent = 'You win!'}
+    else if(computerScoreDisplay.textContent >=5){displayWinner.textContent = 'You lose!'}
+}
+
+function game(playerSelection) {
+    let select = playerSelection.target.getAttribute('class');
+    let compSelect = computerPlay();
+    console.log(compSelect);
+    console.log(select);
+
+    if(select == compSelect) return 0;
+    else if(select == "rock" && compSelect =="scissors") return 1;
+    else if(select == "paper" && compSelect == "rock") return 1;
+    else if(select == "scissors" && compSelect == "paper") return 1;
+    else return -1 ;
 }
 
 
